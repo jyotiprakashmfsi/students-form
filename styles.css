@@ -2,16 +2,14 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  /* font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; */
-    font-family: "Lexend Mega", serif;
+  font-family: "Lexend Mega", serif;
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;
   letter-spacing: -2px;
 }
 
-body{
+body {
   background-color: #fdfd96;
   display: flex;
   justify-content: center;
@@ -20,7 +18,7 @@ body{
 }
 
 .container {
-  max-width: 800px;
+  max-width: 700px;
   background-color: #f7f3e3;
   padding: 40px;
   border-radius: 8px;
@@ -60,7 +58,8 @@ select {
   transition: 0.2s;
 }
 
-input:focus, select:focus{
+input:focus,
+select:focus {
   outline: none;
   box-shadow: 6px 6px #000;
 }
@@ -73,18 +72,23 @@ input:focus, select:focus{
   gap: 1rem;
 }
 
-.genderBirthQualifi{
+.genderBirthQualifi {
   flex-wrap: wrap;
 }
 
-.qualifibirth{
+.qualifibirth {
   display: flex;
   gap: 3rem;
 }
 
-.gender{
+.gender {
   display: flex;
   gap: 1rem;
+}
+
+.genderLabel{
+  display: flex; 
+  column-gap: 10px;
 }
 
 .interests {
@@ -115,3 +119,44 @@ button:hover {
   width: 100px;
   height: 120px;
 } */
+
+
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 15px;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* display: none; */
+  z-index: 1000;
+  transform: translateY(100px);
+  opacity: 0;
+  animation: slideUp 0.5s forwards;
+}
+
+.notification.error {
+  background-color: #f44336;
+}
+
+.notification.success {
+  background-color: #4caf50;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100px); 
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.notification.show {
+  display: block;
+}

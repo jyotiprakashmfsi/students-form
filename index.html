@@ -44,11 +44,11 @@
           <div>
             <label>Gender</label>
             <div class="gender">
-              <label style="display: flex; column-gap: 10px"
+              <label class="genderLabel"
                 ><input style="box-shadow: none" name="gender" type="radio" />
                 Male</label
               >
-              <label style="display: flex; column-gap: 10px"
+              <label class="genderLabel"
                 ><input style="box-shadow: none" name="gender" type="radio" />
                 Female</label
               >
@@ -57,7 +57,7 @@
           <div class="qualifibirth">
             <div>
               <label for="qualification">Max Qualification</label>
-              <select name="qualification">
+              <select id="qualification" name="qualification">
                 <option value="bachelors">Bachelors</option>
                 <option value="masters">Masters</option>
                 <option value="doctorate">Doctorate</option>
@@ -80,36 +80,35 @@
               <label for="address2">Address Line 2</label>
               <input id="address2" name="address2" type="text" />
             </div>
+            <div>
+              <label for="postal">Postal Code</label>
+              <input id="postal" name="postal" type="number" />
+            </div>
           </div>
+         
           <div>
-            <label for="postal">Postal Code</label>
-            <input id="postal" name="postal" type="number" />
-          </div>
-          <div>
-            <label for="city">City</label>
-            <select name="city" id="city">
-              <option value="Bhubaneswar">Bhubaneswar</option>
-              <option value="Cuttack">Cuttack</option>
-              <option value="Burla">Burla</option>
+            <label for="country">Country</label>
+            <select id="country" name="country">
+              <option value="">Select Country</option>
+              <option value="India">India</option>
+              <option value="Japan">Japan</option>
+              <option value="USA">USA</option>
             </select>
           </div>
           <div>
             <label for="state">State</label>
-            <select name="state" id="state">
-              <option value="odisha">Odisha</option>
-              <option value="westBengal">West Bengal</option>
-              <option value="Jharkhand">Jharkhand</option>
+            <select id="state" name="state">
+              <option value="">Select State</option>
             </select>
           </div>
-        </div>
-        <!-- <div class="interests">
-          <label>Interests</label>
           <div>
-            <label style="display: flex; flex-direction: row;"><input style="box-shadow: none;" type="checkbox" name="sports" /> Sports</label>
-            <label style="display: flex; flex-direction: row;"><input style="box-shadow: none;" type="checkbox" name="music" /> Music</label>
-            <label style="display: flex; flex-direction: row;"><input style="box-shadow: none;" type="checkbox" name="acting" /> Acting</label>
+            <label for="city">City</label>
+            <select id="city" name="city">
+              <option value="">Select City</option>
+            </select>
           </div>
-        </div> -->
+          
+        </div>
         <div>
           <input class="photoFrame" id="photo" type="file" />
           <label for="photo">Upload Your Photo</label>
@@ -120,5 +119,6 @@
         </div>
       </form>
     </div>
+    <script src="scripts.js"></script>
   </body>
 </html>
