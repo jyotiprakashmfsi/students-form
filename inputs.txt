@@ -1,0 +1,63 @@
+Student's form
+
+
+Goal- Collect all the required data for university registration for the first time.
+
+Techs- html, css, js
+
+All inputs available in html- 
+
+<input type="button">
+<input type="checkbox">
+<input type="color">
+<input type="date">
+<input type="datetime-local">
+<input type="email">
+<input type="file">
+<input type="hidden">
+<input type="image">
+<input type="month">
+<input type="number">
+<input type="password">
+<input type="radio">
+<input type="range">
+<input type="reset">
+<input type="search">
+<input type="submit">
+<input type="tel">
+<input type="text">
+<input type="time">
+<input type="url">
+<input type="week">
+<select> <options></options> </select>
+
+Inputs-
+    1. name (first, second, last)       : textbox
+    2. email                            : textbox
+    3. phone no                         : number
+    4. gender                           : radio
+    5. max qualification                : options
+    6. birthday date                    : date
+    7. present adress                   : text
+    8. address line 2                   : text
+    9. city                             : search, options
+    10. state                            : search, options
+    11. postal code                     : number
+    12. country                         : search, options
+    13. permament address               : text
+    14. father's name                   : text
+    15. fathers no                      : number
+    16. mothers name                    : text
+    17. mothers no                      : number
+    18. local guradian name             : text
+    19. local guardian no               : number
+    20. interests                       : text
+    21. photo                           : image
+    22. marksheet of prev clg           : file
+    23. print                           : button
+    24. submit                          : submit button
+    25. reset                           : reset button
+    26. policies                        : checkbox
+
+Validation
+    1.

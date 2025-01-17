@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Student Registration</h1>
+      <form autocomplete="on">
+        <div class="inputName">
+          <div>
+            <label for="firstname">First Name</label>
+            <input id="firstname" name="firstname" type="text" />
+          </div>
+          <div>
+            <label for="middlename">Middle Name</label>
+            <input id="middlename" name="middlename" type="text" />
+          </div>
+          <div>
+            <label for="lastname">Last Name</label>
+            <input id="lastname" name="lastname" type="text" />
+          </div>
+        </div>
+        <div class="emailPhone">
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" />
+          </div>
+          <div>
+            <label for="phoneno">Phone Number</label>
+            <input id="phoneno" name="phoneno" type="number" />
+          </div>
+        </div>
+        <div class="genderBirthQualifi">
+          <div>
+            <label>Gender</label>
+            <div class="gender">
+              <label style="display: flex; column-gap: 10px"
+                ><input style="box-shadow: none" name="gender" type="radio" />
+                Male</label
+              >
+              <label style="display: flex; column-gap: 10px"
+                ><input style="box-shadow: none" name="gender" type="radio" />
+                Female</label
+              >
+            </div>
+          </div>
+          <div class="qualifibirth">
+            <div>
+              <label for="qualification">Max Qualification</label>
+              <select name="qualification">
+                <option value="bachelors">Bachelors</option>
+                <option value="masters">Masters</option>
+                <option value="doctorate">Doctorate</option>
+              </select>
+            </div>
+            <div>
+              <label for="birth">Birthday</label>
+              <input id="birth" name="birth" type="date" />
+            </div>
+          </div>
+        </div>
+        <div class="presentAddr">
+          <label>Present Address</label>
+          <div class="addressLine">
+            <div>
+              <label for="address1">Address Line 1</label>
+              <input id="address1" name="address1" type="text" />
+            </div>
+            <div>
+              <label for="address2">Address Line 2</label>
+              <input id="address2" name="address2" type="text" />
+            </div>
+          </div>
+          <div>
+            <label for="postal">Postal Code</label>
+            <input id="postal" name="postal" type="number" />
+          </div>
+          <div>
+            <label for="city">City</label>
+            <select name="city" id="city">
+              <option value="Bhubaneswar">Bhubaneswar</option>
+              <option value="Cuttack">Cuttack</option>
+              <option value="Burla">Burla</option>
+            </select>
+          </div>
+          <div>
+            <label for="state">State</label>
+            <select name="state" id="state">
+              <option value="odisha">Odisha</option>
+              <option value="westBengal">West Bengal</option>
+              <option value="Jharkhand">Jharkhand</option>
+            </select>
+          </div>
+        </div>
+        <!-- <div class="interests">
+          <label>Interests</label>
+          <div>
+            <label style="display: flex; flex-direction: row;"><input style="box-shadow: none;" type="checkbox" name="sports" /> Sports</label>
+            <label style="display: flex; flex-direction: row;"><input style="box-shadow: none;" type="checkbox" name="music" /> Music</label>
+            <label style="display: flex; flex-direction: row;"><input style="box-shadow: none;" type="checkbox" name="acting" /> Acting</label>
+          </div>
+        </div> -->
+        <div>
+          <input class="photoFrame" id="photo" type="file" />
+          <label for="photo">Upload Your Photo</label>
+        </div>
+        <div class="buttons">
+          <button type="submit">Submit</button>
+          <button type="reset">Reset</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
