@@ -1,17 +1,16 @@
-function showNotif(message, type) {
-    console.log(message, type);
-    const notificationBox = document.createElement('div');
-    notificationBox.classList.add('notification', type);
-    notificationBox.textContent = message;
+function showMessage(msg, type) {
+    const box = document.createElement('div');
+    box.classList.add('notification', type);
+    box.textContent = msg;
 
-    document.body.appendChild(notificationBox);
+    document.body.appendChild(box);
 
     setTimeout(() => {
-        notificationBox.remove();
+        box.remove();
     }, 4000);
 }
 
-const countries = {
+const myPlaces = {
     India: {
         states: ['Odisha', 'West Bengal', 'Jharkhand'],
         cities: {
@@ -39,41 +38,41 @@ const countries = {
 };
 
 document.getElementById('country').addEventListener('change', function () {
-    const selectedCountry = this.value;
-    const stateSelect = document.getElementById('state');
-    const citySelect = document.getElementById('city');
+    const myCountry = this.value;
+    const myState = document.getElementById('state');
+    const myCity = document.getElementById('city');
 
-    stateSelect.innerHTML = '';
-    citySelect.innerHTML = '';
+    myState.innerHTML = '';
+    myCity.innerHTML = '';
 
-    if (countries[selectedCountry]) {
-        countries[selectedCountry].states.forEach((state) => {
-            const option = document.createElement('option');
-            option.value = state;
-            option.textContent = state;
-            stateSelect.appendChild(option);
+    if (myPlaces[myCountry]) {
+        myPlaces[myCountry].states.forEach((s) => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            myState.appendChild(opt);
         });
     }
 });
 
 document.getElementById('state').addEventListener('change', function () {
-    const selectedState = this.value;
-    const selectedCountry = document.getElementById('country').value;
-    const citySelect = document.getElementById('city');
+    const myState = this.value;
+    const myCountry = document.getElementById('country').value;
+    const myCity = document.getElementById('city');
 
-    citySelect.innerHTML = '';
+    myCity.innerHTML = '';
 
-    if (countries[selectedCountry] && countries[selectedCountry].cities[selectedState]) {
-        countries[selectedCountry].cities[selectedState].forEach((city) => {
-            const option = document.createElement('option');
-            option.value = city;
-            option.textContent = city;
-            citySelect.appendChild(option);
+    if (myPlaces[myCountry] && myPlaces[myCountry].cities[myState]) {
+        myPlaces[myCountry].cities[myState].forEach((c) => {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            myCity.appendChild(opt);
         });
     }
 });
 
-const validationRules = {
+const checkStuff = {
     firstname: {
         required: true,
         minLength: 2,
@@ -162,48 +161,47 @@ const validationRules = {
     }
 };
 
-function validateField(fieldName, value) {
-    const rules = validationRules[fieldName];
-    if (!rules) return { isValid: true, message: '' };
-    console.log(fieldName, value);
+function checkInput(input, value) {
+    const rules = checkStuff[input];
+    if (!rules) return { ok: true, msg: '' };
     
-    const field = document.getElementById(fieldName);
-    const errorE = document.getElementById(`${fieldName}-error`);
+    const thing = document.getElementById(input);
+    const errormsg = document.getElementById(`${input}-error`);
     
-    if (!field || !errorE) {
-        return { isValid: true, message: '' };
+    if (!thing || !errormsg) {
+        return { ok: true, msg: '' };
     }
+    console.log("rule", rules);
+    console.log("inputs to check", input);
 
     if (rules.required && (!value || value.trim() === '')) {
-        field.classList.add('error');
-        errorE.textContent = rules.messages.required;
-        return { isValid: false, message: rules.messages.required };
+        thing.classList.add('error');
+        errormsg.textContent = rules.messages.required;
+        return { ok: false, msg: rules.messages.required };
     }
 
     if (rules.minLength && value.length < rules.minLength) {
-        field.classList.add('error');
-        errorE.textContent = rules.messages.minLength;
-        return { isValid: false, message: rules.messages.minLength };
+        thing.classList.add('error');
+        errormsg.textContent = rules.messages.minLength;
+        return { ok: false, msg: rules.messages.minLength };
     }
-
+    change
     if (rules.pattern && !rules.pattern.test(value)) {
-        field.classList.add('error');
-        errorE.textContent = rules.messages.pattern;
-        return { isValid: false, message: rules.messages.pattern };
+        thing.classList.add('error');
+        errormsg.textContent = rules.messages.pattern;
+        return { ok: false, msg: rules.messages.pattern };
     }
 
-    field.classList.remove('error');
-    errorE.textContent = '';
-    return { isValid: true, message: '' };
+    thing.classList.remove('error');
+    errormsg.textContent = '';
+    return { ok: true, msg: '' };
 }
 
-document.querySelectorAll('input, select').forEach(field => {
-    if (field.type === 'radio') return;
-
-    console.log("blur", field);
-
-    field.addEventListener('blur', function() {
-        validateField(this.id, this.value);
+document.querySelectorAll('input, select').forEach(item => {
+    if (item.type === 'radio') return;
+    
+    item.addEventListener('blur', function() {
+        checkInput(this.id, this.value);
     });
 });
 
@@ -217,35 +215,191 @@ genderInputs.forEach(input => {
     });
 });
 
-function addEntryToTable(formData) {
-    const tableBody = document.getElementById('entries-body');
-    const newRow = document.createElement('tr');
-    
-    const photoFile = document.getElementById('photo').files[0];
-    const photoName = photoFile ? photoFile.name : 'No photo';
-    
-    const name = `${formData.get('firstname')} ${formData.get('lastname')}`;
-    
-    const rowContent = `
-        <td>${name}</td>
-        <td>${formData.get('email')}</td>
-        <td>${formData.get('phoneno')}</td>
-        <td>${formData.get('gender') || ''}</td>
-        <td>${formData.get('qualification')}</td>
-        <td>${formData.get('birth')}</td>
-        <td>${formData.get('address1')}</td>
-        <td>${formData.get('address2') || ''}</td>
-        <td>${formData.get('postal')}</td>
-        <td>${formData.get('country')}</td>
-        <td>${formData.get('state')}</td>
-        <td>${formData.get('city')}</td>
-        <td>${photoName}</td>
-    `;
-    
-    newRow.innerHTML = rowContent;
-    tableBody.appendChild(newRow);
+function addToTable(data) {
+    const myTable = document.getElementById('entries-table');
+    const myRows = myTable.querySelector('tbody') || myTable.createTBody();
+    const newRow = myRows.insertRow();
 
+    const stuffToAdd = ['firstname', 'email', 'phoneno', 'gender', 'qualification', 'birth', 'address1', 'address2', 'postal', 'country', 'state', 'city'];
+    
+    const nameBox = newRow.insertCell();
+    nameBox.textContent = `${data.get('firstname')} ${data.get('lastname')}`;
+    
+    stuffToAdd.slice(1).forEach(thing => {
+        const box = newRow.insertCell();
+        box.textContent = data.get(thing);
+    });
+
+    const picBox = newRow.insertCell();
+    const myPic = data.get('photo');
+    if (myPic && myPic instanceof File) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.width = '50px';
+            img.style.height = '50px';
+            picBox.appendChild(img);
+        };
+        reader.readAsDataURL(myPic);
+    }
+
+    const buttonBox = newRow.insertCell();
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.className = 'edit-btn';
+    editButton.onclick = () => changeStuff(data, newRow);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.className = 'delete-btn';
+    deleteButton.onclick = () => removeRow(newRow);
+
+    buttonBox.appendChild(editButton);
+    buttonBox.appendChild(deleteButton);
+
+    saveMyStuff();
 }
+
+function saveMyStuff() {
+    const myTable = document.getElementById('entries-table');
+    const myRows = myTable.querySelector('tbody');
+    if (!myRows) return;
+
+    const allStuff = [];
+    myRows.querySelectorAll('tr').forEach(row => {
+        const boxes = row.cells;
+        const stuff = {
+            name: boxes[0].textContent,
+            email: boxes[1].textContent,
+            phone: boxes[2].textContent,
+            gender: boxes[3].textContent,
+            qualification: boxes[4].textContent,
+            birth: boxes[5].textContent,
+            address1: boxes[6].textContent,
+            address2: boxes[7].textContent,
+            postal: boxes[8].textContent,
+            country: boxes[9].textContent,
+            state: boxes[10].textContent,
+            city: boxes[11].textContent,
+            photo: boxes[12].querySelector('img')?.src || ''
+        };
+        allStuff.push(stuff);
+    });
+
+    localStorage.setItem('myStuff', JSON.stringify(allStuff));
+}
+
+function loadMyStuff() {
+    const savedStuff = JSON.parse(localStorage.getItem('myStuff') || '[]');
+    const myTable = document.getElementById('entries-table');
+    const myRows = myTable.querySelector('tbody') || myTable.createTBody();
+    myRows.innerHTML = '';
+
+    savedStuff.forEach(stuff => {
+        const newRow = myRows.insertRow();
+        
+        Object.values(stuff).forEach((thing, num) => {
+            const box = newRow.insertCell();
+            if (num === 12 && thing) { 
+                const img = document.createElement('img');
+                img.src = thing;
+                img.style.width = '50px';
+                img.style.height = '50px';
+                box.appendChild(img);
+            } else {
+                box.textContent = thing;
+            }
+        });
+
+        const buttonBox = newRow.insertCell();
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.className = 'edit-btn';
+        editButton.onclick = () => changeStuff(stuff, newRow);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'delete-btn';
+        deleteButton.onclick = () => removeRow(newRow);
+
+        buttonBox.appendChild(editButton);
+        buttonBox.appendChild(deleteButton);
+    });
+}
+
+function changeStuff(data, row) {
+    const myForm = document.querySelector('form');
+    let fname, lname, mail, phone, gender, study, bday, 
+        addr1, addr2, zip, country, state, city;
+
+    if (data instanceof FormData) {
+        fname = data.get('firstname');
+        lname = data.get('lastname');
+        mail = data.get('email');
+        phone = data.get('phoneno');
+        gender = data.get('gender');
+        study = data.get('qualification');
+        bday = data.get('birth');
+        addr1 = data.get('address1');
+        addr2 = data.get('address2');
+        zip = data.get('postal');
+        country = data.get('country');
+        state = data.get('state');
+        city = data.get('city');
+    } else {
+        [fname, lname] = data.name.split(' ');
+        mail = data.email;
+        phone = data.phone;
+        gender = data.gender;
+        study = data.qualification;
+        bday = data.birth;
+        addr1 = data.address1;
+        addr2 = data.address2;
+        zip = data.postal;
+        country = data.country;
+        state = data.state;
+        city = data.city;
+    }
+    
+    myForm.firstname.value = fname;
+    myForm.lastname.value = lname;
+    myForm.email.value = mail;
+    myForm.phoneno.value = phone;
+    myForm.querySelector(`input[name="gender"][value="${gender}"]`).checked = true;
+    myForm.qualification.value = study;
+    myForm.birth.value = bday;
+    myForm.address1.value = addr1;
+    myForm.address2.value = addr2;
+    myForm.postal.value = zip;
+    myForm.country.value = country;
+    
+    const event1 = new Event('change');
+    myForm.country.dispatchEvent(event1);
+    
+    setTimeout(() => {
+        myForm.state.value = state;
+        const event2 = new Event('change');
+        myForm.state.dispatchEvent(event2);
+        
+        setTimeout(() => {
+            myForm.city.value = city;
+        }, 100);
+    }, 100);
+
+    removeRow(row);
+    
+    const updateBtn = myForm.querySelector('button[type="submit"]');
+    updateBtn.textContent = 'Update';
+}
+
+function removeRow(row) {
+    row.remove();
+    saveMyStuff();
+    showMessage('Row deleted!', 'success');
+}
+
+window.addEventListener('load', loadMyStuff);
 
 const form = document.querySelector('form');
 form.addEventListener('submit', function (event) {
@@ -254,10 +408,10 @@ form.addEventListener('submit', function (event) {
     let isValid = true;
     const formData = new FormData(this);
 
-    Object.keys(validationRules).forEach(fieldName => {
+    Object.keys(checkStuff).forEach(fieldName => {
         const value = formData.get(fieldName);
-        const validation = validateField(fieldName, value);
-        if (!validation.isValid) {
+        const validation = checkInput(fieldName, value);
+        if (!validation.ok) {
             isValid = false;
         }
     });
@@ -266,17 +420,17 @@ form.addEventListener('submit', function (event) {
         isValid = false;
         const genderError = document.getElementById('gender-error');
         if (genderError) {
-            genderError.textContent = validationRules.gender.messages.required;
+            genderError.textContent = checkStuff.gender.messages.required;
         }
     }
 
     if (isValid) {
-        addEntryToTable(formData);
-        showNotif('Form submitted successfully!', 'success');
+        addToTable(formData);
+        showMessage('Form submitted successfully!', 'success');
         this.reset();
         document.querySelectorAll('.error-message').forEach(error => error.textContent = '');
         document.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
     } else {
-        showNotif('Please fix the errors before submitting.', 'error');
+        showMessage('Please fix the errors before submitting.', 'error');
     }
 });
