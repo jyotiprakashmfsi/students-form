@@ -185,7 +185,7 @@ function checkInput(input, value) {
         errormsg.textContent = rules.messages.minLength;
         return { ok: false, msg: rules.messages.minLength };
     }
-    change
+
     if (rules.pattern && !rules.pattern.test(value)) {
         thing.classList.add('error');
         errormsg.textContent = rules.messages.pattern;
