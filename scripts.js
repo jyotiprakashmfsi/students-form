@@ -287,6 +287,8 @@ function saveMyStuff() {
         allStuff.push(stuff);
     });
 
+    console.log("saving", allStuff)
+
     localStorage.setItem('myStuff', JSON.stringify(allStuff));
 }
 
