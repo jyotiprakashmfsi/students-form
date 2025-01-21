@@ -230,8 +230,12 @@ function addToTable(data) {
         box.textContent = data.get(thing);
     });
 
+    console.log('data to add in table', data)
+
     const picBox = newRow.insertCell();
     const myPic = data.get('photo');
+    console.log('photo info', myPic);
+    console.log(myPic);
     if (myPic && myPic instanceof File) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -425,6 +429,8 @@ form.addEventListener('submit', function (event) {
             genderError.textContent = checkStuff.gender.messages.required;
         }
     }
+
+    console.log("formdata is", formData);
 
     if (isValid) {
         addToTable(formData);
