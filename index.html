@@ -10,112 +10,136 @@
       href="https://fonts.googleapis.com/css2?family=Lexend+Mega:wght@100..900&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="page-container">
       <div class="form-container">
         <h1>Student Registration</h1>
+        <div class="stepper">
+          <div class="step active" data-step="1">
+            <div class="step-circle">1</div>
+            <div class="step-text">Personal Info</div>
+          </div>
+          <div class="step" data-step="2">
+            <div class="step-circle">2</div>
+            <div class="step-text">Contact</div>
+          </div>
+          <div class="step" data-step="3">
+            <div class="step-circle">3</div>
+            <div class="step-text">Address</div>
+          </div>
+        </div>
         <form autocomplete="on">
-          <div class="inputName">
-            <div>
-              <label for="firstname">First Name <span class="required">*</span></label>
-              <input id="firstname" name="firstname" type="text" />
-              <span class="error-message" id="firstname-error"></span>
-            </div>
-            <div>
-              <label for="lastname">Last Name <span class="required">*</span></label>
-              <input id="lastname" name="lastname" type="text" />
-              <span class="error-message" id="lastname-error"></span>
-            </div>
-          </div>
-          <div class="emailPhone">
-            <div>
-              <label for="email">Email <span class="required">*</span></label>
-              <input id="email" name="email" type="email" />
-              <span class="error-message" id="email-error"></span>
-            </div>
-            <div>
-              <label for="phoneno">Phone Number <span class="required">*</span></label>
-              <input id="phoneno" name="phoneno" type="tel" />
-              <span class="error-message" id="phoneno-error"></span>
-            </div>
-          </div>
-          <div class="genderBirthQualifi">
-            <div>
-              <label>Gender <span class="required">*</span></label>
-              <div class="gender">
-                <label class="genderLabel">
-                  <input style="box-shadow: none" name="gender" type="radio" value="male" />
-                  Male
-                </label>
-                <label class="genderLabel">
-                  <input style="box-shadow: none" name="gender" type="radio" value="female" />
-                  Female
-                </label>
-              </div>
-              <span class="error-message" id="gender-error"></span>
-            </div>
-            <div>
-              <label for="qualification">Max Qualification <span class="required">*</span></label>
-              <select id="qualification" name="qualification">
-                <option value="">Select Qualification</option>
-                <option value="bachelors">Bachelors</option>
-                <option value="masters">Masters</option>
-                <option value="doctorate">Doctorate</option>
-              </select>
-              <span class="error-message" id="qualification-error"></span>
-            </div>
-          </div>
-          <div class="birth">
-            <div>
-              <label for="birth">Birthday <span class="required">*</span></label>
-              <input id="birth" name="birth" type="date" />
-              <span class="error-message" id="birth-error"></span>
-            </div>
-          </div>
-          <div class="presentAddr">
-            <label>Present Address</label>
-            <div class="addressLine">
+          <div class="step-content active" data-step="1">
+            <div class="inputName">
               <div>
-                <label for="address1">Address Line 1 <span class="required">*</span></label>
-                <input id="address1" name="address1" type="text" />
-                <span class="error-message" id="address1-error"></span>
+                <label for="firstname">First Name <span class="required">*</span></label>
+                <input id="firstname" name="firstname" type="text" />
+                <span class="error-message" id="firstname-error"></span>
               </div>
               <div>
-                <label for="address2">Address Line 2</label>
-                <input id="address2" name="address2" type="text" />
-                <span class="error-message" id="address2-error"></span>
+                <label for="lastname">Last Name <span class="required">*</span></label>
+                <input id="lastname" name="lastname" type="text" />
+                <span class="error-message" id="lastname-error"></span>
+              </div>
+            </div>
+          </div>
+          <div class="step-content" data-step="2">
+            <div class="emailPhone">
+              <div>
+                <label for="email">Email <span class="required">*</span></label>
+                <input id="email" name="email" type="email" />
+                <span class="error-message" id="email-error"></span>
               </div>
               <div>
-                <label for="postal">Postal Code <span class="required">*</span></label>
-                <input id="postal" name="postal" type="text" />
-                <span class="error-message" id="postal-error"></span>
+                <label for="phoneno">Phone Number <span class="required">*</span></label>
+                <input id="phoneno" name="phoneno" type="tel" />
+                <span class="error-message" id="phoneno-error"></span>
               </div>
             </div>
-            <div>
-              <label for="country">Country <span class="required">*</span></label>
-              <select id="country" name="country">
-                <option value="">Select Country</option>
-                <option value="India">India</option>
-                <option value="Japan">Japan</option>
-                <option value="USA">USA</option>
-              </select>
-              <span class="error-message" id="country-error"></span>
+            <div class="genderBirthQualifi">
+              <div>
+                <label>Gender <span class="required">*</span></label>
+                <div class="gender">
+                  <label class="genderLabel">
+                    <input style="box-shadow: none" name="gender" type="radio" value="male" />
+                    Male
+                  </label>
+                  <label class="genderLabel">
+                    <input style="box-shadow: none" name="gender" type="radio" value="female" />
+                    Female
+                  </label>
+                </div>
+                <span class="error-message" id="gender-error"></span>
+              </div>
+              <div>
+                <label for="qualification">Max Qualification <span class="required">*</span></label>
+                <select id="qualification" name="qualification">
+                  <option value="">Select Qualification</option>
+                  <option value="bachelors">Bachelors</option>
+                  <option value="masters">Masters</option>
+                  <option value="doctorate">Doctorate</option>
+                </select>
+                <span class="error-message" id="qualification-error"></span>
+              </div>
             </div>
-            <div>
-              <label for="state">State <span class="required">*</span></label>
-              <select id="state" name="state">
-                <option value="">Select State</option>
-              </select>
-              <span class="error-message" id="state-error"></span>
+            <div class="birth">
+              <div>
+                <label for="birth">Birthday <span class="required">*</span></label>
+                <input id="birth" name="birth" type="date" />
+                <span class="error-message" id="birth-error"></span>
+              </div>
             </div>
-            <div>
-              <label for="city">City <span class="required">*</span></label>
-              <select id="city" name="city">
-                <option value="">Select City</option>
-              </select>
-              <span class="error-message" id="city-error"></span>
+          </div>
+          <div class="step-content" data-step="3">
+            <div class="presentAddr">
+              <label>Present Address</label>
+              <div class="addressLine">
+                <div>
+                  <label for="address1">Address Line 1 <span class="required">*</span></label>
+                  <input id="address1" name="address1" type="text" />
+                  <span class="error-message" id="address1-error"></span>
+                </div>
+                <div>
+                  <label for="address2">Address Line 2</label>
+                  <input id="address2" name="address2" type="text" />
+                  <span class="error-message" id="address2-error"></span>
+                </div>
+                <div>
+                  <label for="postal">Postal Code <span class="required">*</span></label>
+                  <input id="postal" name="postal" type="text" />
+                  <span class="error-message" id="postal-error"></span>
+                </div>
+              </div>
+              <div>
+                <label for="country">Country <span class="required">*</span></label>
+                <select id="country" name="country">
+                  <option value="">Select Country</option>
+                  <option value="India">India</option>
+                  <option value="Japan">Japan</option>
+                  <option value="USA">USA</option>
+                </select>
+                <span class="error-message" id="country-error"></span>
+              </div>
+              <div>
+                <label for="state">State <span class="required">*</span></label>
+                <select id="state" name="state">
+                  <option value="">Select State</option>
+                </select>
+                <span class="error-message" id="state-error"></span>
+              </div>
+              <div>
+                <label for="city">City <span class="required">*</span></label>
+                <select id="city" name="city">
+                  <option value="">Select City</option>
+                </select>
+                <span class="error-message" id="city-error"></span>
+              </div>
             </div>
           </div>
           <div>
@@ -124,8 +148,9 @@
             <span class="error-message" id="photo-error"></span>
           </div>
           <div class="buttons">
-            <button type="reset">Reset</button>
-            <button type="submit">Update</button>
+            <button type="button" class="prev-btn" style="display: none;">Previous</button>
+            <button type="button" class="next-btn">Next</button>
+            <button type="submit" class="submit-btn" style="display: none;">Submit</button>
           </div>
         </form>
       </div>
@@ -147,11 +172,10 @@
                 <th>Country</th>
                 <th>State</th>
                 <th>City</th>
-                <th>Photo</th>
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="entries-body"></tbody>
+            <tbody></tbody>
           </table>
         </div>
       </div>

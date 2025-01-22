@@ -215,203 +215,182 @@ genderInputs.forEach(input => {
     });
 });
 
-function addToTable(data) {
-    const myTable = document.getElementById('entries-table');
-    const myRows = myTable.querySelector('tbody') || myTable.createTBody();
-    const newRow = myRows.insertRow();
+let currentStep = 1;
+const totalSteps = 3;
 
-    const stuffToAdd = ['firstname', 'email', 'phoneno', 'gender', 'qualification', 'birth', 'address1', 'address2', 'postal', 'country', 'state', 'city'];
-    
-    const nameBox = newRow.insertCell();
-    nameBox.textContent = `${data.get('firstname')} ${data.get('lastname')}`;
-    
-    stuffToAdd.slice(1).forEach(thing => {
-        const box = newRow.insertCell();
-        box.textContent = data.get(thing);
+function updateSteps() {
+    document.querySelectorAll('.step').forEach(step => {
+        const stepNum = parseInt(step.dataset.step);
+        if (stepNum === currentStep) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
     });
 
-    console.log('data to add in table', data)
+    document.querySelectorAll('.step-content').forEach(content => {
+        const stepNum = parseInt(content.dataset.step);
+        if (stepNum === currentStep) {
+            content.classList.add('active');
+        } else {
+            content.classList.remove('active');
+        }
+    });
 
-    const picBox = newRow.insertCell();
-    const myPic = data.get('photo');
-    console.log('photo info', myPic);
-    console.log(myPic);
-    if (myPic && myPic instanceof File) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.width = '50px';
-            img.style.height = '50px';
-            picBox.appendChild(img);
-        };
-        reader.readAsDataURL(myPic);
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    const submitBtn = document.querySelector('.submit-btn');
+
+    prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+    nextBtn.style.display = currentStep === totalSteps ? 'none' : 'block';
+    submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
+}
+
+document.querySelector('.prev-btn').addEventListener('click', () => {
+    if (currentStep > 1) {
+        currentStep--;
+        updateSteps();
     }
+});
 
-    const buttonBox = newRow.insertCell();
+document.querySelector('.next-btn').addEventListener('click', () => {
+    if (currentStep < totalSteps) {
+        currentStep++;
+        updateSteps();
+    }
+});
+
+document.querySelectorAll('.step').forEach(step => {
+    step.addEventListener('click', () => {
+        currentStep = parseInt(step.dataset.step);
+        updateSteps();
+    });
+});
+
+function loadData() {
+    const storedData = localStorage.getItem('studentData');
+    if (storedData) {
+        const students = JSON.parse(storedData);
+        students.forEach(student => addToTable(student));
+    }
+}
+
+function saveToLocalStorage(data) {
+    const storedData = localStorage.getItem('studentData');
+    let students = storedData ? JSON.parse(storedData) : [];
+    
+    if (window.editingRow) {
+        const index = Array.from(window.editingRow.parentNode.children).indexOf(window.editingRow);
+        students[index] = data;
+        window.editingRow = null;
+    } else {
+        students.push(data);
+    }
+    
+    localStorage.setItem('studentData', JSON.stringify(students));
+}
+
+function addToTable(data) {
+    const table = document.getElementById('entries-table').getElementsByTagName('tbody')[0];
+    const row = table.insertRow();
+    
+    const nameCell = row.insertCell();
+    nameCell.textContent = data.firstname + ' ' + data.lastname;
+    
+    const emailCell = row.insertCell();
+    emailCell.textContent = data.email;
+    
+    const phoneCell = row.insertCell();
+    phoneCell.textContent = data.phoneno;
+    
+    const genderCell = row.insertCell();
+    genderCell.textContent = data.gender;
+    
+    const qualificationCell = row.insertCell();
+    qualificationCell.textContent = data.qualification;
+    
+    const birthdayCell = row.insertCell();
+    birthdayCell.textContent = data.birth;
+    
+    const address1Cell = row.insertCell();
+    address1Cell.textContent = data.address1;
+    
+    const address2Cell = row.insertCell();
+    address2Cell.textContent = data.address2 || '-';
+    
+    const postalCell = row.insertCell();
+    postalCell.textContent = data.postal;
+    
+    const countryCell = row.insertCell();
+    countryCell.textContent = data.country;
+    
+    const stateCell = row.insertCell();
+    stateCell.textContent = data.state;
+    
+    const cityCell = row.insertCell();
+    cityCell.textContent = data.city;
+    
+    const actionsCell = row.insertCell();
+    actionsCell.className = 'action-buttons';
+    
     const editButton = document.createElement('button');
-    editButton.textContent = 'Edit';
+    editButton.innerHTML = '<i class="fas fa-edit"></i>';
     editButton.className = 'edit-btn';
-    editButton.onclick = () => changeStuff(data, newRow);
-
+    editButton.onclick = () => changeStuff(data, row);
+    
     const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Delete';
+    deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
     deleteButton.className = 'delete-btn';
-    deleteButton.onclick = () => removeRow(newRow);
-
-    buttonBox.appendChild(editButton);
-    buttonBox.appendChild(deleteButton);
-
-    saveMyStuff();
-}
-
-function saveMyStuff() {
-    const myTable = document.getElementById('entries-table');
-    const myRows = myTable.querySelector('tbody');
-    if (!myRows) return;
-
-    const allStuff = [];
-    myRows.querySelectorAll('tr').forEach(row => {
-        const boxes = row.cells;
-        const stuff = {
-            name: boxes[0].textContent,
-            email: boxes[1].textContent,
-            phone: boxes[2].textContent,
-            gender: boxes[3].textContent,
-            qualification: boxes[4].textContent,
-            birth: boxes[5].textContent,
-            address1: boxes[6].textContent,
-            address2: boxes[7].textContent,
-            postal: boxes[8].textContent,
-            country: boxes[9].textContent,
-            state: boxes[10].textContent,
-            city: boxes[11].textContent,
-            photo: boxes[12].querySelector('img')?.src || ''
-        };
-        allStuff.push(stuff);
-    });
-
-    console.log("saving", allStuff)
-
-    localStorage.setItem('myStuff', JSON.stringify(allStuff));
-}
-
-function loadMyStuff() {
-    const savedStuff = JSON.parse(localStorage.getItem('myStuff') || '[]');
-    const myTable = document.getElementById('entries-table');
-    const myRows = myTable.querySelector('tbody') || myTable.createTBody();
-    myRows.innerHTML = '';
-
-    savedStuff.forEach(stuff => {
-        const newRow = myRows.insertRow();
-        
-        Object.values(stuff).forEach((thing, num) => {
-            const box = newRow.insertCell();
-            if (num === 12 && thing) { 
-                const img = document.createElement('img');
-                img.src = thing;
-                img.style.width = '50px';
-                img.style.height = '50px';
-                box.appendChild(img);
-            } else {
-                box.textContent = thing;
-            }
-        });
-
-        const buttonBox = newRow.insertCell();
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.className = 'edit-btn';
-        editButton.onclick = () => changeStuff(stuff, newRow);
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.className = 'delete-btn';
-        deleteButton.onclick = () => removeRow(newRow);
-
-        buttonBox.appendChild(editButton);
-        buttonBox.appendChild(deleteButton);
-    });
+    deleteButton.onclick = () => removeRow(row);
+    
+    actionsCell.appendChild(editButton);
+    actionsCell.appendChild(deleteButton);
 }
 
 function changeStuff(data, row) {
-    const myForm = document.querySelector('form');
-    let fname, lname, mail, phone, gender, study, bday, 
-        addr1, addr2, zip, country, state, city;
+    Object.keys(data).forEach(key => {
+        const input = document.querySelector(`[name="${key}"]`);
+        if (input) {
+            if (input.type === 'radio') {
+                document.querySelector(`[name="${key}"][value="${data[key]}"]`).checked = true;
+            } else {
+                input.value = data[key];
+            }
+        }
+    });
 
-    if (data instanceof FormData) {
-        fname = data.get('firstname');
-        lname = data.get('lastname');
-        mail = data.get('email');
-        phone = data.get('phoneno');
-        gender = data.get('gender');
-        study = data.get('qualification');
-        bday = data.get('birth');
-        addr1 = data.get('address1');
-        addr2 = data.get('address2');
-        zip = data.get('postal');
-        country = data.get('country');
-        state = data.get('state');
-        city = data.get('city');
-    } else {
-        [fname, lname] = data.name.split(' ');
-        mail = data.email;
-        phone = data.phone;
-        gender = data.gender;
-        study = data.qualification;
-        bday = data.birth;
-        addr1 = data.address1;
-        addr2 = data.address2;
-        zip = data.postal;
-        country = data.country;
-        state = data.state;
-        city = data.city;
-    }
+    const submitBtn = document.querySelector('.submit-btn');
+    submitBtn.textContent = 'Update';
     
-    myForm.firstname.value = fname;
-    myForm.lastname.value = lname;
-    myForm.email.value = mail;
-    myForm.phoneno.value = phone;
-    myForm.querySelector(`input[name="gender"][value="${gender}"]`).checked = true;
-    myForm.qualification.value = study;
-    myForm.birth.value = bday;
-    myForm.address1.value = addr1;
-    myForm.address2.value = addr2;
-    myForm.postal.value = zip;
-    myForm.country.value = country;
+    currentStep = 1;
+    updateSteps();
     
-    const event1 = new Event('change');
-    myForm.country.dispatchEvent(event1);
-    
-    setTimeout(() => {
-        myForm.state.value = state;
-        const event2 = new Event('change');
-        myForm.state.dispatchEvent(event2);
-        
-        setTimeout(() => {
-            myForm.city.value = city;
-        }, 100);
-    }, 100);
-
-    removeRow(row);
-    
-    const updateBtn = myForm.querySelector('button[type="submit"]');
-    updateBtn.textContent = 'Update';
+    window.editingRow = row;
 }
 
 function removeRow(row) {
+    const index = Array.from(row.parentNode.children).indexOf(row);
+    const storedData = localStorage.getItem('studentData');
+    if (storedData) {
+        let students = JSON.parse(storedData);
+        students.splice(index, 1);
+        localStorage.setItem('studentData', JSON.stringify(students));
+    }
     row.remove();
-    saveMyStuff();
-    showMessage('Row deleted!', 'success');
 }
 
-window.addEventListener('load', loadMyStuff);
-
-const form = document.querySelector('form');
-form.addEventListener('submit', function (event) {
+document.querySelector('form').addEventListener('submit', function(event) {
     event.preventDefault();
-
+    
     let isValid = true;
+    
+    document.querySelectorAll('.error-message').forEach(error => {
+        error.textContent = '';
+    });
+    document.querySelectorAll('.error').forEach(field => {
+        field.classList.remove('error');
+    });
+
     const formData = new FormData(this);
 
     Object.keys(checkStuff).forEach(fieldName => {
@@ -419,6 +398,10 @@ form.addEventListener('submit', function (event) {
         const validation = checkInput(fieldName, value);
         if (!validation.ok) {
             isValid = false;
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            const errorElement = document.getElementById(`${fieldName}-error`);
+            if (field) field.classList.add('error');
+            if (errorElement) errorElement.textContent = validation.message;
         }
     });
 
@@ -429,16 +412,35 @@ form.addEventListener('submit', function (event) {
             genderError.textContent = checkStuff.gender.messages.required;
         }
     }
-
-    console.log("formdata is", formData);
-
+    
     if (isValid) {
-        addToTable(formData);
-        showMessage('Form submitted successfully!', 'success');
+        const formData = {};
+        new FormData(this).forEach((value, key) => {
+            formData[key] = value.trim();
+        });
+
+        saveToLocalStorage(formData);
+        
+        const tbody = document.querySelector('#entries-table tbody');
+        tbody.innerHTML = '';
+        loadData();
+        
         this.reset();
-        document.querySelectorAll('.error-message').forEach(error => error.textContent = '');
-        document.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
+        document.querySelector('.submit-btn').textContent = 'Submit';
+                
+        currentStep = 1;
+        updateSteps();
     } else {
-        showMessage('Please fix the errors before submitting.', 'error');
+        const errorFields = document.querySelectorAll('.error');
+        if (errorFields.length > 0) {
+            const firstErrorField = errorFields[0];
+            const stepContent = firstErrorField.closest('.step-content');
+            if (stepContent) {
+                currentStep = parseInt(stepContent.dataset.step);
+                updateSteps();
+            }
+        }
     }
 });
+
+window.addEventListener('load', loadData);
