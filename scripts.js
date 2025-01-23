@@ -19,6 +19,7 @@ const myPlaces = {
             Jharkhand: ['Ranchi', 'Jamshedpur'],
         },
     },
+
     Japan: {
         states: ['Tokyo', 'Osaka', 'Kyoto'],
         cities: {
@@ -27,6 +28,7 @@ const myPlaces = {
             Kyoto: ['Gion', 'Arashiyama'],
         },
     },
+    
     USA: {
         states: ['California', 'New York', 'Texas'],
         cities: {
