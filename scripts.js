@@ -1,15 +1,3 @@
-function showMessage(msg, type) {
-    const box = document.createElement('div');
-    box.classList.add('notification', type);
-    box.textContent = msg;
-
-    document.body.appendChild(box);
-
-    setTimeout(() => {
-        box.remove();
-    }, 4000);
-}
-
 const myPlaces = {
     India: {
         states: ['Odisha', 'West Bengal', 'Jharkhand'],
@@ -19,7 +7,6 @@ const myPlaces = {
             Jharkhand: ['Ranchi', 'Jamshedpur'],
         },
     },
-
     Japan: {
         states: ['Tokyo', 'Osaka', 'Kyoto'],
         cities: {
@@ -28,7 +15,6 @@ const myPlaces = {
             Kyoto: ['Gion', 'Arashiyama'],
         },
     },
-    
     USA: {
         states: ['California', 'New York', 'Texas'],
         cities: {
@@ -39,37 +25,34 @@ const myPlaces = {
     },
 };
 
-document.getElementById('country').addEventListener('change', function () {
-    const myCountry = this.value;
-    const myState = document.getElementById('state');
-    const myCity = document.getElementById('city');
+$('#country').on('change', function() {
+    const myCountry = $(this).val();
+    const $myState = $('#state');
+    const $myCity = $('#city');
 
-    myState.innerHTML = '';
-    myCity.innerHTML = '';
+    // myState.innerHTML = '';
+    // myCity.innerHTML = '';
+    $myState.empty();
+    $myCity.empty();
 
     if (myPlaces[myCountry]) {
         myPlaces[myCountry].states.forEach((s) => {
-            const opt = document.createElement('option');
-            opt.value = s;
-            opt.textContent = s;
-            myState.appendChild(opt);
+            // const opt = document.createElement('option');
+            $('<option>').val(s).text(s).appendTo($myState);
         });
     }
 });
 
-document.getElementById('state').addEventListener('change', function () {
-    const myState = this.value;
-    const myCountry = document.getElementById('country').value;
-    const myCity = document.getElementById('city');
+$('#state').on('change', function() {
+    const myState = $(this).val();
+    const myCountry = $('#country').val();
+    const $myCity = $('#city');
 
-    myCity.innerHTML = '';
+    $myCity.empty();
 
     if (myPlaces[myCountry] && myPlaces[myCountry].cities[myState]) {
         myPlaces[myCountry].cities[myState].forEach((c) => {
-            const opt = document.createElement('option');
-            opt.value = c;
-            opt.textContent = c;
-            myCity.appendChild(opt);
+            $('<option>').val(c).text(c).appendTo($myCity);
         });
     }
 });
@@ -167,106 +150,89 @@ function checkInput(input, value) {
     const rules = checkStuff[input];
     if (!rules) return { ok: true, msg: '' };
     
-    const thing = document.getElementById(input);
-    const errormsg = document.getElementById(`${input}-error`);
+    const $thing = $('#' + input);
+    const $errormsg = $('#' + input + '-error');
     
-    if (!thing || !errormsg) {
+    if (!$thing.length || !$errormsg.length) {
         return { ok: true, msg: '' };
     }
     console.log("rule", rules);
     console.log("inputs to check", input);
 
     if (rules.required && (!value || value.trim() === '')) {
-        thing.classList.add('error');
-        errormsg.textContent = rules.messages.required;
+        $thing.addClass('error');
+        $errormsg.text(rules.messages.required);
         return { ok: false, msg: rules.messages.required };
     }
 
     if (rules.minLength && value.length < rules.minLength) {
-        thing.classList.add('error');
-        errormsg.textContent = rules.messages.minLength;
+        $thing.addClass('error');
+        $errormsg.text(rules.messages.minLength);
         return { ok: false, msg: rules.messages.minLength };
     }
 
     if (rules.pattern && !rules.pattern.test(value)) {
-        thing.classList.add('error');
-        errormsg.textContent = rules.messages.pattern;
+        $thing.addClass('error');
+        $errormsg.text(rules.messages.pattern);
         return { ok: false, msg: rules.messages.pattern };
     }
 
-    thing.classList.remove('error');
-    errormsg.textContent = '';
+    $thing.removeClass('error');
+    $errormsg.text('');
     return { ok: true, msg: '' };
 }
 
-document.querySelectorAll('input, select').forEach(item => {
-    if (item.type === 'radio') return;
-    
-    item.addEventListener('blur', function() {
-        checkInput(this.id, this.value);
-    });
+$('input, select').not('[type="radio"]').on('blur', function() {
+    checkInput(this.id, $(this).val());
 });
 
-const genderInputs = document.querySelectorAll('input[name="gender"]');
-genderInputs.forEach(input => {
-    input.addEventListener('change', function() {
-        const errorE = document.getElementById('gender-error');
-        if (document.querySelector('input[name="gender"]:checked')) {
-            errorE.textContent = '';
-        }
-    });
+$('input[name="gender"]').on('change', function() {
+    const $errorE = $('#gender-error');
+    if ($('input[name="gender"]:checked').length) {
+        $errorE.text('');
+    }
 });
 
 let currentStep = 1;
 const totalSteps = 3;
 
 function updateSteps() {
-    document.querySelectorAll('.step').forEach(step => {
-        const stepNum = parseInt(step.dataset.step);
-        if (stepNum === currentStep) {
-            step.classList.add('active');
-        } else {
-            step.classList.remove('active');
-        }
+    $('.step').each(function() {
+        const stepNum = parseInt($(this).data('step'));
+        $(this).toggleClass('active', stepNum === currentStep);
     });
 
-    document.querySelectorAll('.step-content').forEach(content => {
-        const stepNum = parseInt(content.dataset.step);
-        if (stepNum === currentStep) {
-            content.classList.add('active');
-        } else {
-            content.classList.remove('active');
-        }
+    $('.step-content').each(function() {
+        const stepNum = parseInt($(this).data('step'));
+        $(this).toggleClass('active', stepNum === currentStep);
     });
 
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
-    const submitBtn = document.querySelector('.submit-btn');
+    const $prevBtn = $('.prev-btn');
+    const $nextBtn = $('.next-btn');
+    const $submitBtn = $('.submit-btn');
 
-    prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
-    nextBtn.style.display = currentStep === totalSteps ? 'none' : 'block';
-    submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
+    $prevBtn.toggle(currentStep !== 1);
+    $nextBtn.toggle(currentStep !== totalSteps);
+    $submitBtn.toggle(currentStep === totalSteps);
 }
 
-document.querySelector('.prev-btn').addEventListener('click', () => {
+$('.prev-btn').on('click', () => {
     if (currentStep > 1) {
         currentStep--;
         updateSteps();
     }
 });
 
-document.querySelector('.next-btn').addEventListener('click', () => {
+$('.next-btn').on('click', () => {
     if (currentStep < totalSteps) {
         currentStep++;
         updateSteps();
     }
 });
 
-document.querySelectorAll('.step').forEach(step => {
-    step.addEventListener('click', () => {
-        currentStep = parseInt(step.dataset.step);
-        updateSteps();
-    });
+$('.step').on('click', function() {
+    currentStep = parseInt($(this).data('step'));
+    updateSteps();
 });
 
 function loadData() {
@@ -282,7 +248,7 @@ function saveToLocalStorage(data) {
     let students = storedData ? JSON.parse(storedData) : [];
     
     if (window.editingRow) {
-        const index = Array.from(window.editingRow.parentNode.children).indexOf(window.editingRow);
+        const index = $(window.editingRow).index();
         students[index] = data;
         window.editingRow = null;
     } else {
@@ -293,156 +259,128 @@ function saveToLocalStorage(data) {
 }
 
 function addToTable(data) {
-    const table = document.getElementById('entries-table').getElementsByTagName('tbody')[0];
-    const row = table.insertRow();
+    const $tbody = $('#entries-table tbody');
+    const $row = $('<tr>');
     
-    const nameCell = row.insertCell();
-    nameCell.textContent = data.firstname + ' ' + data.lastname;
+    $('<td>').text(data.firstname + ' ' + data.lastname).appendTo($row);
+    $('<td>').text(data.email).appendTo($row);
+    $('<td>').text(data.phoneno).appendTo($row);
+    $('<td>').text(data.gender).appendTo($row);
+    $('<td>').text(data.qualification).appendTo($row);
+    $('<td>').text(data.birth).appendTo($row);
+    $('<td>').text(data.address1).appendTo($row);
+    $('<td>').text(data.address2 || '-').appendTo($row);
+    $('<td>').text(data.postal).appendTo($row);
+    $('<td>').text(data.country).appendTo($row);
+    $('<td>').text(data.state).appendTo($row);
+    $('<td>').text(data.city).appendTo($row);
     
-    const emailCell = row.insertCell();
-    emailCell.textContent = data.email;
+    const $actionsCell = $('<td>').addClass('action-buttons');
     
-    const phoneCell = row.insertCell();
-    phoneCell.textContent = data.phoneno;
+    const $editButton = $('<button>')
+        .addClass('edit-btn')
+        .html('<i class="fas fa-edit"></i>')
+        .on('click', () => changeStuff(data, $row));
     
-    const genderCell = row.insertCell();
-    genderCell.textContent = data.gender;
+    const $deleteButton = $('<button>')
+        .addClass('delete-btn')
+        .html('<i class="fas fa-trash"></i>')
+        .on('click', () => removeRow($row));
     
-    const qualificationCell = row.insertCell();
-    qualificationCell.textContent = data.qualification;
-    
-    const birthdayCell = row.insertCell();
-    birthdayCell.textContent = data.birth;
-    
-    const address1Cell = row.insertCell();
-    address1Cell.textContent = data.address1;
-    
-    const address2Cell = row.insertCell();
-    address2Cell.textContent = data.address2 || '-';
-    
-    const postalCell = row.insertCell();
-    postalCell.textContent = data.postal;
-    
-    const countryCell = row.insertCell();
-    countryCell.textContent = data.country;
-    
-    const stateCell = row.insertCell();
-    stateCell.textContent = data.state;
-    
-    const cityCell = row.insertCell();
-    cityCell.textContent = data.city;
-    
-    const actionsCell = row.insertCell();
-    actionsCell.className = 'action-buttons';
-    
-    const editButton = document.createElement('button');
-    editButton.innerHTML = '<i class="fas fa-edit"></i>';
-    editButton.className = 'edit-btn';
-    editButton.onclick = () => changeStuff(data, row);
-    
-    const deleteButton = document.createElement('button');
-    deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-    deleteButton.className = 'delete-btn';
-    deleteButton.onclick = () => removeRow(row);
-    
-    actionsCell.appendChild(editButton);
-    actionsCell.appendChild(deleteButton);
+    $actionsCell.append($editButton, $deleteButton);
+    $row.append($actionsCell);
+    $tbody.append($row);
 }
 
-function changeStuff(data, row) {
-    Object.keys(data).forEach(key => {
-        const input = document.querySelector(`[name="${key}"]`);
-        if (input) {
-            if (input.type === 'radio') {
-                document.querySelector(`[name="${key}"][value="${data[key]}"]`).checked = true;
+function changeStuff(data, $row) {
+    $.each(data, function(key, value) {
+        const $input = $(`[name="${key}"]`);
+        if ($input.length) {
+            if ($input.attr('type') === 'radio') {
+                $(`[name="${key}"][value="${value}"]`).prop('checked', true);
             } else {
-                input.value = data[key];
+                $input.val(value);
             }
         }
     });
 
-    const submitBtn = document.querySelector('.submit-btn');
-    submitBtn.textContent = 'Update';
+    $('.submit-btn').text('Update');
     
     currentStep = 1;
     updateSteps();
     
-    window.editingRow = row;
+    window.editingRow = $row[0];
 }
 
-function removeRow(row) {
-    const index = Array.from(row.parentNode.children).indexOf(row);
+function removeRow($row) {
+    const index = $row.index();
     const storedData = localStorage.getItem('studentData');
     if (storedData) {
         let students = JSON.parse(storedData);
         students.splice(index, 1);
         localStorage.setItem('studentData', JSON.stringify(students));
     }
-    row.remove();
+    $row.remove();
 }
 
-document.querySelector('form').addEventListener('submit', function(event) {
+$('form').on('submit', function(event) {
     event.preventDefault();
     
     let isValid = true;
     
-    document.querySelectorAll('.error-message').forEach(error => {
-        error.textContent = '';
-    });
-    document.querySelectorAll('.error').forEach(field => {
-        field.classList.remove('error');
-    });
+    $('.error-message').text('');
+    $('.error').removeClass('error');
 
     const formData = new FormData(this);
 
-    Object.keys(checkStuff).forEach(fieldName => {
+    $.each(checkStuff, function(fieldName) {
         const value = formData.get(fieldName);
         const validation = checkInput(fieldName, value);
         if (!validation.ok) {
             isValid = false;
-            const field = document.querySelector(`[name="${fieldName}"]`);
-            const errorElement = document.getElementById(`${fieldName}-error`);
-            if (field) field.classList.add('error');
-            if (errorElement) errorElement.textContent = validation.message;
+            const $field = $(`[name="${fieldName}"]`);
+            const $errorElement = $(`#${fieldName}-error`);
+            if ($field.length) $field.addClass('error');
+            if ($errorElement.length) $errorElement.text(validation.message);
         }
     });
 
     if (!formData.get('gender')) {
         isValid = false;
-        const genderError = document.getElementById('gender-error');
-        if (genderError) {
-            genderError.textContent = checkStuff.gender.messages.required;
+        const $genderError = $('#gender-error');
+        if ($genderError.length) {
+            $genderError.text(checkStuff.gender.messages.required);
         }
     }
     
+
     if (isValid) {
         const formData = {};
-        new FormData(this).forEach((value, key) => {
-            formData[key] = value.trim();
+        $(this).serializeArray().forEach(({name, value}) => {
+            formData[name] = value.trim();
         });
 
         saveToLocalStorage(formData);
         
-        const tbody = document.querySelector('#entries-table tbody');
-        tbody.innerHTML = '';
+        $('#entries-table tbody').empty();
         loadData();
         
         this.reset();
-        document.querySelector('.submit-btn').textContent = 'Submit';
+        $('.submit-btn').text('Submit');
                 
         currentStep = 1;
         updateSteps();
     } else {
-        const errorFields = document.querySelectorAll('.error');
-        if (errorFields.length > 0) {
-            const firstErrorField = errorFields[0];
-            const stepContent = firstErrorField.closest('.step-content');
-            if (stepContent) {
-                currentStep = parseInt(stepContent.dataset.step);
+        const $errorFields = $('.error');
+        if ($errorFields.length) {
+            const $firstErrorField = $errorFields.first();
+            const $stepContent = $firstErrorField.closest('.step-content');
+            if ($stepContent.length) {
+                currentStep = parseInt($stepContent.data('step'));
                 updateSteps();
             }
         }
     }
 });
 
-window.addEventListener('load', loadData);
+$(window).on('load', loadData);
