@@ -1,5 +1,4 @@
 const StudentForm = (function($) {
-    'use strict';
 
     let currentStep = 1;
     const totalSteps = 3;
