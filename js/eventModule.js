@@ -1,5 +1,4 @@
 const EventModule = (function($) {
-    'use strict';
 
     let editIndex = -1;
 
